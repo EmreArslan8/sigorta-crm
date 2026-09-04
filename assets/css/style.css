@@ -290,8 +290,15 @@ table.tbl{font-size:13px;min-width:720px}
   .topbar h1{font-size:15px} .topbar .sub{display:none}
   .search{display:none}
   .g-4,.g-3,.g-2{grid-template-columns:1fr}
+  /* KPI kartları mobilde 2'li ve kompakt — dikey uzamayı yarıya indirir */
+  .grid:has(.kpi){grid-template-columns:repeat(2,1fr);gap:10px}
+  .kpi{padding:11px 12px;border-radius:10px}
+  .kpi::after{height:2.5px}
+  .kpi .t{font-size:11px;line-height:1.3;font-weight:600}
+  .kpi .v{font-size:18px;margin:5px 0 3px;letter-spacing:-.02em}
+  .kpi .d{font-size:10.5px;line-height:1.35;display:block}
+  .trend{font-size:10.5px}
   .dl{grid-template-columns:1fr}
-  .kpi .v{font-size:22px}
   .modal{margin:0} .overlay{padding:10px}
   .hide-sm{display:none}
   .card-h{flex-wrap:wrap}
