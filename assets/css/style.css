@@ -50,7 +50,7 @@ table{border-collapse:collapse;width:100%}
 /* ---------- Sidebar ---------- */
 .sidebar{
   width:var(--sb);flex:0 0 var(--sb);background:var(--nav);color:var(--nav-text);
-  display:flex;flex-direction:column;position:fixed;inset:0 auto 0 0;z-index:60;
+  display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;height:100%;z-index:60;
   transition:transform .25s ease;
 }
 .brand{display:flex;align-items:center;gap:11px;padding:20px 20px 18px;border-bottom:1px solid rgba(255,255,255,.07)}
@@ -90,7 +90,8 @@ table{border-collapse:collapse;width:100%}
   position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);padding:12px 24px;display:flex;align-items:center;gap:14px;
 }
-.burger{display:none;background:none;border:1px solid var(--line);border-radius:9px;padding:7px 9px;line-height:0}
+.burger{display:none;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 11px;line-height:0;color:var(--text);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.burger:active{background:var(--surface-2)}
 .topbar h1{font-size:17px}
 .topbar .sub{font-size:12px;color:var(--muted);margin-top:1px}
 .top-actions{margin-left:auto;display:flex;align-items:center;gap:9px}
@@ -274,9 +275,10 @@ table.tbl{font-size:13px;min-width:720px}
 }
 @media(max-width:980px){
   .sidebar{transform:translateX(-100%);box-shadow:var(--sh-lg)}
-  body.nav-open .sidebar{transform:none}
+  .scrim{display:none;position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(12,19,38,.45);z-index:55}
+  body.nav-open .sidebar{transform:translateX(0)}
   body.nav-open .scrim{display:block}
-  .scrim{display:none;position:fixed;inset:0;background:rgba(12,19,38,.45);z-index:55}
+  body.nav-open{overflow:hidden}
   .main{margin-left:0}
   .burger{display:inline-flex}
   .g-3{grid-template-columns:repeat(2,1fr)}

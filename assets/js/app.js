@@ -219,6 +219,7 @@
     const r = ROUTES.find(x => x.key === key) || ROUTES[0];
     $("#pageTitle").textContent = r.title;
     $("#pageSub").textContent = r.sub || "";
+    closeModal();
     $("#view").innerHTML = r.view();
     if (r.mount) r.mount();
     renderNav();
@@ -234,10 +235,14 @@
   /* ---------- Global olaylar ---------- */
   function wire() {
     window.addEventListener("hashchange", render);
-    $("#burger").onclick = () => document.body.classList.toggle("nav-open");
-    $("#scrim").onclick = () => document.body.classList.remove("nav-open");
+    /* Mobil menü: delegasyonla bağlanır, böylece DOM yeniden çizilse de çalışır */
+    document.addEventListener("click", (e) => {
+      if (e.target.closest("#burger")) { e.preventDefault(); document.body.classList.toggle("nav-open"); return; }
+      if (e.target.closest("#scrim")) { document.body.classList.remove("nav-open"); return; }
+      if (e.target.closest("#nav a")) { document.body.classList.remove("nav-open"); }
+    }, true);
     $("#overlay").onclick = (e) => { if (e.target.id === "overlay") closeModal(); };
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeModal(); document.body.classList.remove("nav-open"); } });
 
     $("#btnSync").onclick = function () {
       const b = this; b.disabled = true; b.style.opacity = ".7";
