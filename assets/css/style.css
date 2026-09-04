@@ -38,6 +38,7 @@ body{
   font:14px/1.5 "Inter","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
   -webkit-font-smoothing:antialiased;
 }
+body.modal-open{position:fixed;left:0;right:0;width:100%;overflow:hidden}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer}
 h1,h2,h3,h4{margin:0;font-weight:650;letter-spacing:-.01em}
@@ -158,7 +159,7 @@ table{border-collapse:collapse;width:100%}
 .b-brand{background:var(--brand-soft);color:var(--brand)}
 
 /* ---------- Tablo ---------- */
-.tbl-wrap{overflow-x:auto}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table.tbl{font-size:13px;min-width:720px}
 .tbl thead th{
   text-align:left;padding:10px 14px;font-size:11px;letter-spacing:.05em;text-transform:uppercase;
@@ -215,7 +216,7 @@ table.tbl{font-size:13px;min-width:720px}
 .ico-box{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;flex:0 0 34px;background:var(--brand-soft);color:var(--brand)}
 
 /* ---------- Modal ---------- */
-.overlay{position:fixed;inset:0;background:rgba(12,19,38,.5);backdrop-filter:blur(2px);z-index:100;display:none;padding:24px;overflow-y:auto}
+.overlay{position:fixed;inset:0;background:rgba(12,19,38,.5);backdrop-filter:blur(2px);z-index:100;display:none;padding:24px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .overlay.on{display:block}
 .modal{background:#fff;border-radius:14px;max-width:920px;margin:24px auto;box-shadow:var(--sh-lg);animation:pop .18s ease}
 .modal.sm{max-width:560px}
@@ -307,6 +308,62 @@ table.tbl{font-size:13px;min-width:720px}
   .filters select{flex:1 1 45%;min-width:0}
   .filters .btn{flex:1 1 100%;justify-content:center}
   .tbl tbody td>b:first-child,.tbl tbody td>.strong{white-space:nowrap}
+
+  /* ---- Tablolar mobilde kart görünümüne dönüşür ---- */
+  .tbl-wrap{overflow-x:visible}
+  table.tbl{min-width:0;display:block}
+  .tbl thead{display:none}
+  .tbl tbody{display:block}
+  .tbl tbody tr{
+    display:block;background:#fff;border:1px solid var(--line);border-radius:11px;
+    padding:12px 13px;margin:0 0 10px;box-shadow:var(--sh);
+  }
+  .tbl tbody tr:last-child{margin-bottom:0}
+  .tbl tbody tr:hover{background:#fff}
+  .tbl tbody td{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    min-width:0;padding:7px 0;border:0;text-align:right;
+  }
+  /* Masaüstünde ikincil olan alanlar mobil kartta kaybolmaz. */
+  .tbl tbody td.hide-sm{display:flex}
+  .tbl tbody td::before{
+    content:attr(data-label);flex:0 0 38%;max-width:130px;text-align:left;
+    font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--muted);font-weight:650;
+  }
+  /* İlk hücre kartın başlığı: etiketsiz ve tam genişlik */
+  .tbl tbody td:first-child{
+    display:block;text-align:left;padding:0 0 10px;margin-bottom:6px;
+    border-bottom:1px solid var(--line-2);
+  }
+  .tbl tbody td:first-child::before{display:none}
+  .tbl tbody td:last-child{padding-bottom:0}
+  .tbl tbody td:empty{display:none}
+  .tbl tbody td:not(:first-child)>*:not(.bar){max-width:62%}
+  .tbl tbody td:not(:first-child) .btn{min-height:40px;justify-content:center}
+  .tbl tbody td .bar{flex:1;max-width:120px}
+  .tbl tbody td .who{justify-content:flex-end}
+  .tbl tbody td:first-child .who{justify-content:flex-start}
+  .tbl tbody td .sub{display:inline}
+  .tbl tbody tr.clickable:active{background:var(--brand-soft);border-color:#c9d8ff}
+  /* Boş durum satırı kart olmasın */
+  .tbl tbody tr:has(.empty){padding:0;border:0;box-shadow:none;background:transparent}
+  .tbl tbody tr:has(.empty) td{display:block;padding:0;border:0;margin:0}
+  .card-b.tight>.tbl-wrap,.card-b.tight>[data-table]>.tbl-wrap{padding:10px}
+  .pager{border-top:0;padding:4px 0 0}
+
+  /* İzin matrisi bir karşılaştırma tablosudur; kartlaştırmak ilişkileri bozar. */
+  .tbl-matrix-wrap{overflow-x:auto;padding:0!important;scrollbar-width:thin}
+  table.tbl-matrix{display:table;min-width:760px}
+  .tbl-matrix thead{display:table-header-group}
+  .tbl-matrix tbody{display:table-row-group}
+  .tbl-matrix tbody tr{display:table-row;background:#fff;border:0;box-shadow:none}
+  .tbl-matrix tbody td{display:table-cell;padding:11px 14px;border-bottom:1px solid var(--line-2);text-align:left}
+  .tbl-matrix tbody td::before{display:none}
+  .tbl-matrix th:first-child,.tbl-matrix td:first-child{
+    position:sticky;left:0;z-index:1;background:#fff;box-shadow:1px 0 0 var(--line);
+  }
+  .tbl-matrix thead th:first-child{z-index:2;background:var(--surface-2)}
   .toasts{left:14px;right:14px;bottom:14px}
   .toast{max-width:none}
 }

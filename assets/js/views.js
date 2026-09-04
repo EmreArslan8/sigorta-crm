@@ -1083,7 +1083,7 @@
       };
       const P = { full: `<span class="badge b-ok"><i class="dot"></i>Tam</span>`, read: `<span class="badge b-info"><i class="dot"></i>Görüntüleme</span>`, own: `<span class="badge b-warn"><i class="dot"></i>Kendi kaydı</span>`, none: `<span class="badge b-idle"><i class="dot"></i>Yok</span>` };
 
-      const matrix = `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Modül</th>${DB.roles.map(r => `<th>${esc(r.name)}</th>`).join("")}</tr></thead><tbody>
+      const matrix = `<div class="tbl-wrap tbl-matrix-wrap" role="region" aria-label="Rol izinleri" tabindex="0"><table class="tbl tbl-matrix"><thead><tr><th>Modül</th>${DB.roles.map(r => `<th>${esc(r.name)}</th>`).join("")}</tr></thead><tbody>
         ${MODULES.map((m, i) => `<tr><td><b>${esc(m)}</b></td>${DB.roles.map(r => `<td>${P[PERM[r.key][i]]}</td>`).join("")}</tr>`).join("")}
       </tbody></table></div>`;
 

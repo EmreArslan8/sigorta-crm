@@ -76,6 +76,19 @@
   }
 
   /* ---------- Modal ---------- */
+  let modalScrollY = 0;
+  function lockPageScroll() {
+    if (document.body.classList.contains("modal-open")) return;
+    modalScrollY = window.scrollY || window.pageYOffset || 0;
+    document.body.style.top = `-${modalScrollY}px`;
+    document.body.classList.add("modal-open");
+  }
+  function unlockPageScroll() {
+    if (!document.body.classList.contains("modal-open")) return;
+    document.body.classList.remove("modal-open");
+    document.body.style.top = "";
+    window.scrollTo(0, modalScrollY);
+  }
   function modal(opts) {
     const host = $("#modalHost");
     host.innerHTML = `<div class="modal ${opts.small ? "sm" : ""}">
@@ -90,10 +103,15 @@
         <button class="btn" data-close>Kapat</button>
       </div></div>`;
     $("#overlay").classList.add("on");
-    document.body.style.overflow = "hidden";
+    lockPageScroll();
+    labelCells(host);
     if (opts.onMount) opts.onMount(host);
   }
-  function closeModal() { $("#overlay").classList.remove("on"); $("#modalHost").innerHTML = ""; document.body.style.overflow = ""; }
+  function closeModal() {
+    $("#overlay").classList.remove("on");
+    $("#modalHost").innerHTML = "";
+    unlockPageScroll();
+  }
   g.closeModal = closeModal;
 
   /* ---------- DataTable bileşeni ----------
@@ -159,6 +177,23 @@
   }
   table.state = TSTATE;
 
+
+  /* Mobil kart görünümünde her hücrenin başlığını gösterebilmek için
+     thead başlıklarını td'lere data-label olarak kopyalar. */
+  function labelCells(root) {
+    (root || document).querySelectorAll("table.tbl").forEach(t => {
+      const ths = Array.prototype.map.call(t.querySelectorAll("thead th"),
+        th => th.textContent.replace(/[▲▼]/g, "").trim());
+      if (!ths.length) return;
+      t.querySelectorAll("tbody tr").forEach(tr => {
+        Array.prototype.forEach.call(tr.children, (td, i) => {
+          const label = ths[i] || (i === ths.length - 1 ? "İşlem" : "");
+          if (label) td.setAttribute("data-label", label);
+        });
+      });
+    });
+  }
+
   /* ---------- Router ---------- */
   const ROUTES = [];
   function route(key, def) { ROUTES.push(Object.assign({ key }, def)); }
@@ -222,6 +257,7 @@
     closeModal();
     $("#view").innerHTML = r.view();
     if (r.mount) r.mount();
+    labelCells($("#view"));
     renderNav();
     document.body.classList.remove("nav-open");
     window.scrollTo(0, 0);
@@ -229,7 +265,12 @@
   g.rerender = render;
 
   /* Aynı sayfayı yeniden çiz (tablo state korunur) */
-  function refresh() { const r = ROUTES.find(x => x.key === current()) || ROUTES[0]; $("#view").innerHTML = r.view(); if (r.mount) r.mount(); }
+  function refresh() {
+    const r = ROUTES.find(x => x.key === current()) || ROUTES[0];
+    $("#view").innerHTML = r.view();
+    if (r.mount) r.mount();
+    labelCells($("#view"));
+  }
   g.refresh = refresh;
 
   /* ---------- Global olaylar ---------- */
